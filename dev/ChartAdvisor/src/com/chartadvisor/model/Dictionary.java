@@ -18,8 +18,6 @@ public final class Dictionary {
 		return FileManager.get().loadModel(dict);
 	}
 	
-	
-	
 	public static void addResource(String propertyName, String propertyType, String LOM) throws Exception{
 		String alreadyExists = Dictionary.getLOM(propertyName, propertyType);
 		if(alreadyExists != null){
