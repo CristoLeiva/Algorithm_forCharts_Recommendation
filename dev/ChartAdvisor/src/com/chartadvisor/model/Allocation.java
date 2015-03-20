@@ -61,26 +61,4 @@ public class Allocation {
 		return new Allocation(left, right);
 	}
 	
-//	public boolean equalsAsMeasurement(Object o){
-//		//the one as measurement is (this)
-//		if(!(o instanceof Allocation))
-//			return false;
-//		else{
-//			Allocation alloc = (Allocation)o;
-//			for (Property s : alloc.leftAllocations){
-//				String LOM = Dictionary.getLOM(s.getPropertyName(), s.getPropertyType());
-//				Property s1 = new Property("",LOM);
-//				if (!leftAllocations.contains(s1))
-//						return false;
-//			}
-//			for (Property s : alloc.rightAllocations){
-//				String LOM = Dictionary.getLOM(s.getPropertyName(), s.getPropertyType());
-//				Property s1 = new Property("",LOM);
-//				if (!rightAllocations.contains(s1))
-//						return false;
-//			}
-//			return true;
-//		}
-//	}
-	
 }

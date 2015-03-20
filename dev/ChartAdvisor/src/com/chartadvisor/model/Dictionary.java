@@ -11,7 +11,7 @@ import com.hp.hpl.jena.vocabulary.*;
 
 public final class Dictionary {
 	
-	private static final String dict = "dictionary.rdf";
+	private static final String dict = "/home/ahmad/Documents/dictionary.rdf";
 	
 	
 	public static Model getModel(){

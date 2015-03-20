@@ -69,10 +69,10 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 //			System.out.println("error saving model");
 //		}
 		ArrayList<Property> right = new ArrayList<Property>();
-		right.add(new Property("country","string"));
+		right.add(new Property("pop_count","integer"));
 		ArrayList<Property> left = new ArrayList<Property>();
-		left.add(new Property("pop_count","integer"));
 		left.add(new Property("year","integer"));
+		left.add(new Property("country","string"));
 		//findCharts(new Allocation(left, right));
 		System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
 	}
