@@ -2,6 +2,8 @@ package com.chartadvisor.utils;
 
 import java.util.*;
 
+import com.chartadvisor.model.Property;
+
 
 public class Combinations {
 
@@ -13,14 +15,14 @@ public class Combinations {
 	}
 	
 	
-	public static ArrayList<ArrayList<String>> combination(Object[]  elements, int K){
-		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+	public static ArrayList<ArrayList<Property>> combination(Object[]  elements, int K){
+		ArrayList<ArrayList<Property>> result = new ArrayList<ArrayList<Property>>();
 		// get the length of the array
 		// e.g. for {'A','B','C','D'} => N = 4 
 		int N = elements.length;
 		
 		if(K > N){
-			System.out.println("Invalid input, K > N");
+			System.out.println("Invalid input, K="+K+" > N="+N);
 			return null;
 		}
 		// calculate the possible combinations
@@ -50,7 +52,7 @@ public class Combinations {
 				if(r == K-1){
 
 					//do something with the combination e.g. add to list or print
-					result.add(toList(combination, elements));
+					result.add(toListProperty(combination, elements));
 					index++;				
 				}
 				else{
@@ -112,6 +114,16 @@ public class Combinations {
 		return result;
 	}
 	
+	public static ArrayList<Property> toListProperty(int[] combination, Object[] elements){
+		ArrayList<Property> result = new ArrayList<Property>();
+		for(int z = 0 ; z < combination.length;z++){
+			
+			result.add((Property)elements[combination[z]]);
+		}
+		//printList(result);
+		return result;
+	}
+	
 	public static void printList(ArrayList<ArrayList<String>> mylist){
 		for(int i=0; i< mylist.size(); i++){
 			for(int j=0; j< mylist.get(i).size(); j++){
@@ -122,7 +134,7 @@ public class Combinations {
 			System.out.println();
 		}
 	}
-	public static String toStringList(ArrayList<String> mylist){
+	public static String toStringList(ArrayList<Property> mylist){
 			String result = "";
 			for(int j=0; j< mylist.size(); j++){
 				if(j!=0)
