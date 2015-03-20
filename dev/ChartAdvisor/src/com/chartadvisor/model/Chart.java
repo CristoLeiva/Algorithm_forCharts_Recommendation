@@ -21,14 +21,14 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 	}
 	
 	public static Allocation toAllocation(StmtIterator stmtIter){
-		ArrayList<String> left = new ArrayList<String>();
-		ArrayList<String> right = new ArrayList<String>();
+		ArrayList<Property> left = new ArrayList<Property>();
+		ArrayList<Property> right = new ArrayList<Property>();
 		while (stmtIter.hasNext()){
 			Statement stmt = stmtIter.next();
 			if(stmt.getPredicate().getLocalName().equals("annotatedTarget"))
-				right.add(stmt.getString());
+				right.add(new Property("",stmt.getString()));
 			else if (stmt.getPredicate().getLocalName().equals("annotatedSource"))
-				left.add(stmt.getString());
+				left.add(new Property("",stmt.getString()));
 		}
 		
 		return new Allocation(left, right);
@@ -68,13 +68,13 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 //		} catch (FileNotFoundException e) {
 //			System.out.println("error saving model");
 //		}
-		ArrayList<String> right = new ArrayList<String>();
-		right.add("QUANTITATIVE");
-		ArrayList<String> left = new ArrayList<String>();
-		left.add("CATEGORICAL");
-		left.add("ORDINAL");
+		ArrayList<Property> right = new ArrayList<Property>();
+		right.add(new Property("country","string"));
+		ArrayList<Property> left = new ArrayList<Property>();
+		left.add(new Property("pop_count","integer"));
+		left.add(new Property("year","integer"));
 		//findCharts(new Allocation(left, right));
-		System.out.println(findCharts(new Allocation(left, right)));
+		System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
 	}
 
 }
