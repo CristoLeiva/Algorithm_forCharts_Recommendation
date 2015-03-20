@@ -30,7 +30,7 @@ public class DataSets {
 		while (iter.hasNext()) {
 		    Statement stmt      = iter.nextStatement();  // get next statement
 		    Resource  subject   = stmt.getSubject();     // get the subject
-		    Property  predicate = stmt.getPredicate();   // get the predicate
+		    com.hp.hpl.jena.rdf.model.Property  predicate = stmt.getPredicate();   // get the predicate
 		    RDFNode   object    = stmt.getObject();      // get the object
 
 		    //System.out.print(subject.getLocalName());
@@ -74,7 +74,7 @@ public class DataSets {
 		while (iter.hasNext()) {
 		    Statement stmt      = iter.nextStatement();  // get next statement
 		    Resource  subject   = stmt.getSubject();     // get the subject
-		    Property  predicate = stmt.getPredicate();   // get the predicate
+		    com.hp.hpl.jena.rdf.model.Property  predicate = stmt.getPredicate();   // get the predicate
 		    RDFNode   object    = stmt.getObject();      // get the object
 
 		    //System.out.print(subject.getLocalName());
