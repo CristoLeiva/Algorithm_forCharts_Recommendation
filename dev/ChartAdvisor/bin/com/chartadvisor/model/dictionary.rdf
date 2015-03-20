@@ -12,4 +12,14 @@
     <dc:type>integer</dc:type>
     <rdfs:subClassOf>quantitative</rdfs:subClassOf>
   </rdf:Description>
+  <rdf:Description rdf:about="http://levelofmeasurement.com/integer/gdp#">
+    <rdfs:label>gdp</rdfs:label>
+    <dc:type>integer</dc:type>
+    <rdfs:subClassOf>quantitative</rdfs:subClassOf>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://levelofmeasurement.com/string/country#">
+    <rdfs:label>country</rdfs:label>
+    <dc:type>string</dc:type>
+    <rdfs:subClassOf>categorical</rdfs:subClassOf>
+  </rdf:Description>  
 </rdf:RDF>
