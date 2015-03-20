@@ -33,8 +33,6 @@ public class AllocationGenerator {
 			list1 = Combinations.combination(properties, i);
 			for(int j=0; j<list1.size(); j++){
 				for(int k=1; k<= properties.length-list1.get(j).size(); k++){
-					if(k==3)
-						System.out.print("mmm");
 					Object[] newProp = removeListFromList(properties, list1.get(j));
 					list2 = Combinations.combination(newProp, k);
 					
