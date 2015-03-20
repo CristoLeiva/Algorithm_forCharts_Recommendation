@@ -10,12 +10,12 @@ public class Allocation {
 		leftAllocations = null;
 		rightAllocations = null;
 	}
-	public Allocation(ArrayList<String> left, ArrayList<String> right){
+	public Allocation(ArrayList<Property> left, ArrayList<Property> right){
 		leftAllocations = left;
 		rightAllocations = right;
 	}
 	
-	public ArrayList<String> leftAllocations, rightAllocations;
+	public ArrayList<Property> leftAllocations, rightAllocations;
 	
 	public String toString(){
 		String printed = "(";
@@ -33,16 +33,54 @@ public class Allocation {
 			return false;
 		else{
 			Allocation alloc = (Allocation)o;
-			for (String s : alloc.leftAllocations){
+			for (Property s : alloc.leftAllocations){
 				if (!leftAllocations.contains(s))
 						return false;
 			}
-			for (String s : alloc.rightAllocations){
+			for (Property s : alloc.rightAllocations){
 				if (!rightAllocations.contains(s))
 						return false;
 			}
 			return true;
 		}
 	}
+	
+	
+	public static Allocation toLOMAllocation(Allocation alloc){
+		ArrayList<Property> left = new ArrayList<Property>();
+		ArrayList<Property> right = new ArrayList<Property>();
+		for (Property s : alloc.leftAllocations){
+			String LOM = Dictionary.getLOM(s.getPropertyName(), s.getPropertyType());
+			left.add(new Property("",LOM));
+		}
+		for (Property s : alloc.rightAllocations){
+			String LOM = Dictionary.getLOM(s.getPropertyName(), s.getPropertyType());
+			right.add(new Property("",LOM));
+		}
+		
+		return new Allocation(left, right);
+	}
+	
+//	public boolean equalsAsMeasurement(Object o){
+//		//the one as measurement is (this)
+//		if(!(o instanceof Allocation))
+//			return false;
+//		else{
+//			Allocation alloc = (Allocation)o;
+//			for (Property s : alloc.leftAllocations){
+//				String LOM = Dictionary.getLOM(s.getPropertyName(), s.getPropertyType());
+//				Property s1 = new Property("",LOM);
+//				if (!leftAllocations.contains(s1))
+//						return false;
+//			}
+//			for (Property s : alloc.rightAllocations){
+//				String LOM = Dictionary.getLOM(s.getPropertyName(), s.getPropertyType());
+//				Property s1 = new Property("",LOM);
+//				if (!rightAllocations.contains(s1))
+//						return false;
+//			}
+//			return true;
+//		}
+//	}
 	
 }
