@@ -1,1 +1,20 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" > 
+  <rdf:Description rdf:about="http://chartsmetadata.com/ColumnChart/ChartPattern2">
+    <owl:annotatedTarget>QUANTITATIVE</owl:annotatedTarget>
+    <owl:annotatedSource>ORDINAL</owl:annotatedSource>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://chartsmetadata.com/ColumnChart">
+    <rdfs:isDefinedBy rdf:resource="http://chartsmetadata.com/ColumnChart/ChartPattern2"/>
+    <rdfs:isDefinedBy rdf:resource="http://chartsmetadata.com/ColumnChart/ChartPattern1"/>
+    <rdfs:label>Column Chart</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://chartsmetadata.com/ColumnChart/ChartPattern1">
+    <owl:annotatedTarget>QUANTITATIVE</owl:annotatedTarget>
+    <owl:annotatedSource>CATEGORICAL</owl:annotatedSource>
+    <owl:annotatedSource>ORDINAL</owl:annotatedSource>
+  </rdf:Description>
+</rdf:RDF>
 
