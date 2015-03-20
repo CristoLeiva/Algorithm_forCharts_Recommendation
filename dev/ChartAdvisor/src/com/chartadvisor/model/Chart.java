@@ -86,16 +86,13 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
 			ArrayList<String> charts = findCharts(allocLOM);
 			if(charts.size()==0){
-				System.out.println("No Possible Charts Were Found for Allocation:");
+				System.out.print("No charts found for allocation: ");
 				System.out.println(alloc);
 				System.out.println("-------------------");
 			}
 			else{
-				System.out.println("Possible Charts Found for Allocation:");
-				System.out.println(alloc);
-				for (String chart : charts){
-					System.out.println(chart);
-				}
+				System.out.print("Chart(s): "+charts);
+				System.out.println(" can be used to visualize allocation: "+ alloc);
 				System.out.println("-------------------");
 			}
 		}

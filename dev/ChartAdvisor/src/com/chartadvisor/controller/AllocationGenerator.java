@@ -57,6 +57,7 @@ public class AllocationGenerator {
 	public static ArrayList<Allocation> validateAllocations (ArrayList<Allocation> allocations){
 		//TODO
 		// Depends on getting the values of all user selected properties from the RDF: Jorge
+		System.out.println("Allocations Are NOT Yet Validated");
 		return allocations;
 	}
 	
