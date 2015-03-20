@@ -1,5 +1,6 @@
 package com.chartadvisor.model;
 
+import com.chartadvisor.controller.AllocationGenerator;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -47,8 +48,10 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 					StmtIterator stmtIter2 =  resource2.listProperties();
 					Allocation alloc = toAllocation(stmtIter2);
 					//System.out.println(alloc);
-					if(alloc.equals(allocation))
-						result.add(resource.getProperty(RDFS.label).getString());
+					if(alloc.equals(allocation)){
+						if(!(result.contains(resource.getProperty(RDFS.label).getString())))
+							result.add(resource.getProperty(RDFS.label).getString());
+					}
 					//System.out.println(stmtIter.next().getProperty(OWL2.annotatedSource).getString());
 				}catch (Exception e){
 					
@@ -68,13 +71,34 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 //		} catch (FileNotFoundException e) {
 //			System.out.println("error saving model");
 //		}
-		ArrayList<Property> right = new ArrayList<Property>();
-		right.add(new Property("pop_count","integer"));
-		ArrayList<Property> left = new ArrayList<Property>();
-		left.add(new Property("year","integer"));
-		left.add(new Property("country","string"));
+//		ArrayList<Property> right = new ArrayList<Property>();
+//		right.add(new Property("pop_count","integer"));
+//		ArrayList<Property> left = new ArrayList<Property>();
+//		left.add(new Property("year","integer"));
+//		left.add(new Property("country","string"));
+		Property[] properties = {new Property("pop_count","integer"),new Property("year","integer"),new Property("country","string")};
 		//findCharts(new Allocation(left, right));
-		System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
+		ArrayList<Allocation> allocations = AllocationGenerator.generateAllocations(properties);
+		allocations = AllocationGenerator.validateAllocations(allocations);
+		//System.out.println(allocations);
+		//System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
+		for(Allocation alloc : allocations){
+			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
+			ArrayList<String> charts = findCharts(allocLOM);
+			if(charts.size()==0){
+				System.out.println("No Possible Charts Were Found for Allocation:");
+				System.out.println(alloc);
+				System.out.println("-------------------");
+			}
+			else{
+				System.out.println("Possible Charts Found for Allocation:");
+				System.out.println(alloc);
+				for (String chart : charts){
+					System.out.println(chart);
+				}
+				System.out.println("-------------------");
+			}
+		}
 	}
 
 }

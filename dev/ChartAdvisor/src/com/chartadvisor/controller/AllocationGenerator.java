@@ -56,6 +56,12 @@ public class AllocationGenerator {
 		return result.toArray();
 	}
 	
+	public static ArrayList<Allocation> validateAllocations (ArrayList<Allocation> allocations){
+		//TODO
+		// Depends on getting the values of all user selected properties from the RDF: Jorge
+		return allocations;
+	}
+	
 //	public static Object[] removeListFromList(String[] properties, ArrayList<String> combinations){
 //		ArrayList<String> result = new ArrayList<String>(); 
 //		for(int i=0; i<properties.length; i++){
