@@ -1,4 +1,4 @@
-package main;
+package com.chartadvisor.model;
 
 import java.io.FileWriter;
 import java.io.IOException;
