@@ -39,7 +39,7 @@ public class Controller implements ActionListener {
 				String path = selectedFile.getAbsolutePath().replace("\\", "/");
 				System.out.println(path);
 				view.getJtxt_FilePath().setText(path);
-				//view.setCheckBoxList(DataSets.getProperties(path));
+				view.setCheckBoxList(DataSets.getProperties(path));
 	        }
 		}
 		if (e.getSource() == view.getJbtn_Generate() || e.getSource() == view.getJmenu_Generate()) {

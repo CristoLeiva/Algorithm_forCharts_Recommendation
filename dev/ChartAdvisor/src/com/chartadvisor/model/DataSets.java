@@ -92,7 +92,7 @@ public class DataSets {
 	    
 		while (iter.hasNext()) {
 		    Statement stmt      = iter.nextStatement();  // get next statement
-		    Property  predicate = stmt.getPredicate();   // get the predicate
+		    com.hp.hpl.jena.rdf.model.Property  predicate = stmt.getPredicate();   // get the predicate
 		    RDFNode   object    = stmt.getObject();      // get the object
 
 		    String Datatype 	= get_datatype(object).toString();
