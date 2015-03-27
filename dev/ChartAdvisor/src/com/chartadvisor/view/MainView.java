@@ -71,7 +71,7 @@ public class MainView extends javax.swing.JFrame {
         jscroll_properties.repaint();
     }
     
-    public ArrayList getCheckedItems() {
+    public ArrayList<String> getCheckedItems() {
         ArrayList<String> selectedItems = new ArrayList<String>();
         for(CheckListItem oneItem : checkboxList) {
             if (oneItem.isSelected()) {
