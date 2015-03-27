@@ -35,8 +35,8 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 		return new Allocation(left, right);
 	}
 	
-	public static ArrayList<String> findCharts(Allocation allocation){
-		ArrayList<String> result = new ArrayList<String>();
+	private static ArrayList<String[]> findPossibleCharts(Allocation allocation, int totalProperties){
+		ArrayList<String[]> result = new ArrayList<String[]>();
 		Model m = getModel();
 		ResIterator resources = m.listResourcesWithProperty(RDFS.label);
 		while(resources.hasNext()){
@@ -47,10 +47,20 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 					Resource resource2 = stmtIter.next().getResource();
 					StmtIterator stmtIter2 =  resource2.listProperties();
 					Allocation alloc = toAllocation(stmtIter2);
-					//System.out.println(alloc);
+					//System.out.println("\nTO ALLOCATION:\n"+alloc);
 					if(alloc.equals(allocation)){
-						if(!(result.contains(resource.getProperty(RDFS.label).getString())))
-							result.add(resource.getProperty(RDFS.label).getString());
+						String[] suggestedChart = new String[]{"",""};
+						suggestedChart[0] = resource.getProperty(RDFS.label).getString();
+						suggestedChart[1] = 100*allocation.getLength()/totalProperties + "";
+						boolean add = true;
+						for(String[] existingResult:result){
+							if(existingResult[0].equals(suggestedChart[0]))
+								if(existingResult[1].equals(suggestedChart[1]))
+									add = false;
+						}
+						if(add){
+							result.add(suggestedChart);
+						}
 					}
 					//System.out.println(stmtIter.next().getProperty(OWL2.annotatedSource).getString());
 				}catch (Exception e){
@@ -61,6 +71,62 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 			
 		}
 		return result;
+	}
+	
+	public static List<String[]> findCharts(String[] propertiesShortNames, String path){
+		ArrayList<String[]> charts = new ArrayList<String[]>();
+		Set<String> propertiesSet = new HashSet<String>(Arrays.asList(propertiesShortNames));
+		//Property[] properties = {new Property("pop_count","integer"),new Property("year","integer"),new Property("country","string")};
+		List<String[]> literals = DataSets.get_properties(DataSets.create_model(path), 1);
+		Property[] properties = new Property[propertiesShortNames.length];
+		String[] propertiesCompleteNames = new String[propertiesShortNames.length];
+		int index = 0;
+		for(String[] literal : literals){
+			if(propertiesSet.contains(literal[2])){
+				properties[index] = new Property(literal[1], literal[2], literal[4]);
+				propertiesCompleteNames[index] = "<"+literal[1]+">";
+				System.out.println(literal[1]);
+				index++;
+			}
+		}
+		//findCharts(new Allocation(left, right));
+		List<Allocation> allocations = AllocationGenerator.generateAllocations(properties);
+		
+		List<String[]> propertiesValues = DataSets.sparql_query_property(DataSets.create_model(path), propertiesCompleteNames);
+		
+		allocations = AllocationGenerator.validateAllocations(allocations,propertiesValues, propertiesShortNames);
+		if(allocations.size()==0)
+			System.out.println("There are now valid allocations for these properties..");
+		System.out.println("\nPossible Valid Allocations:\n"+allocations+"\n");
+		
+		
+//		for (String[] values : propertiesValues){
+//			for(String value : values){
+//				System.out.print(value+"\t");
+//			}
+//			System.out.println();
+//		}
+		
+		//System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
+		for(Allocation alloc : allocations){
+			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
+			ArrayList<String[]> foundcharts = findPossibleCharts(allocLOM, propertiesShortNames.length);
+			if(foundcharts.size()==0){
+				System.out.print("No charts found for allocation: ");
+				System.out.println(alloc);
+				System.out.println("-------------------");
+			}
+			else{
+				charts.addAll(foundcharts);
+				for(String[] chart:charts){
+					System.out.print("Chart: "+chart[0]);
+					System.out.print(" can be used to visualize allocation: "+ alloc);
+					System.out.println(" with percentage: "+chart[1] + "%");
+					System.out.println("-------------------");
+				}
+			}
+		}
+		return charts;
 	}
 	
 	public static void main(String[] args) {
@@ -76,26 +142,13 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 //		ArrayList<Property> left = new ArrayList<Property>();
 //		left.add(new Property("year","integer"));
 //		left.add(new Property("country","string"));
-		Property[] properties = {new Property("pop_count","integer"),new Property("year","integer"),new Property("country","string")};
-		//findCharts(new Allocation(left, right));
-		ArrayList<Allocation> allocations = AllocationGenerator.generateAllocations(properties);
-		allocations = AllocationGenerator.validateAllocations(allocations);
-		//System.out.println(allocations);
-		//System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
-		for(Allocation alloc : allocations){
-			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
-			ArrayList<String> charts = findCharts(allocLOM);
-			if(charts.size()==0){
-				System.out.print("No charts found for allocation: ");
-				System.out.println(alloc);
-				System.out.println("-------------------");
-			}
-			else{
-				System.out.print("Chart(s): "+charts);
-				System.out.println(" can be used to visualize allocation: "+ alloc);
-				System.out.println("-------------------");
-			}
-		}
+		
+		
+		//To be provided by the interface
+		String[] propertiesNames = {"nameShort", "populationTotal", "populationYear", "HDITotal"};
+		String path = "/home/ahmad/git/Algorithm_forCharts_Recommendation/dev/Application/Bin/WebSemanticsLab/src/main/geodataModified.rdf";
+		
+		findCharts(propertiesNames, path);
 	}
 
 }

@@ -22,4 +22,29 @@
     <dc:type>string</dc:type>
     <rdfs:subClassOf>categorical</rdfs:subClassOf>
   </rdf:Description>  
+  <rdf:Description rdf:about="http://levelofmeasurement.com/float/obsvalue#">
+    <rdfs:label>obsvalue</rdfs:label>
+    <dc:type>float</dc:type>
+    <rdfs:subClassOf>quantitative</rdfs:subClassOf>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://levelofmeasurement.com/float/lat#">
+    <rdfs:label>lat</rdfs:label>
+    <dc:type>float</dc:type>
+    <rdfs:subClassOf>quantitative</rdfs:subClassOf>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://levelofmeasurement.com/float/populationTotal#">
+    <rdfs:label>populationTotal</rdfs:label>
+    <dc:type>float</dc:type>
+    <rdfs:subClassOf>quantitative</rdfs:subClassOf>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://levelofmeasurement.com/string/nameShort#">
+    <rdfs:label>nameShort</rdfs:label>
+    <dc:type>string</dc:type>
+    <rdfs:subClassOf>categorical</rdfs:subClassOf>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://levelofmeasurement.com/int/populationYear#">
+    <rdfs:label>populationYear</rdfs:label>
+    <dc:type>int</dc:type>
+    <rdfs:subClassOf>ordinal</rdfs:subClassOf>
+  </rdf:Description>
 </rdf:RDF>

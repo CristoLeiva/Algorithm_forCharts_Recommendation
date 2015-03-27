@@ -2,13 +2,21 @@ package com.chartadvisor.model;
 
 public class Property {
 	
+	public Property(String propertyCompleteName, String propertyName,
+			String propertyType) {
+		super();
+		this.propertyCompleteName = propertyCompleteName;
+		this.propertyName = propertyName;
+		this.propertyType = propertyType;
+	}
+
 	private String propertyCompleteName;
 	private String propertyName;
 	private String propertyType;
 	
 
 	public String getPropertyCompleteName() {
-		return propertyName;
+		return propertyCompleteName;
 	}
 	
 	public String getPropertyName() {
@@ -18,7 +26,7 @@ public class Property {
 		this.propertyName = propertyName;
 	}
 	public void setPropertyCompleteName(String propertyName) {
-		this.propertyName = propertyName;
+		this.propertyCompleteName = propertyName;
 	}
 	public String getPropertyType() {
 		return propertyType;
