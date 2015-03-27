@@ -75,18 +75,17 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 	
 	public static List<String[]> findCharts(String[] propertiesShortNames, String path){
 		ArrayList<String[]> charts = new ArrayList<String[]>();
-		Set<String> propertiesSet = new HashSet<String>(Arrays.asList(propertiesShortNames));
+		List<String> propertiesSet = new ArrayList<String>(Arrays.asList(propertiesShortNames));
 		//Property[] properties = {new Property("pop_count","integer"),new Property("year","integer"),new Property("country","string")};
 		List<String[]> literals = DataSets.get_properties(DataSets.create_model(path), 1);
 		Property[] properties = new Property[propertiesShortNames.length];
 		String[] propertiesCompleteNames = new String[propertiesShortNames.length];
-		int index = 0;
 		for(String[] literal : literals){
 			if(propertiesSet.contains(literal[2])){
+				int index = propertiesSet.indexOf(literal[2]);
 				properties[index] = new Property(literal[1], literal[2], literal[4]);
 				propertiesCompleteNames[index] = "<"+literal[1]+">";
 				System.out.println(literal[1]);
-				index++;
 			}
 		}
 		//findCharts(new Allocation(left, right));
@@ -112,9 +111,9 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
 			ArrayList<String[]> foundcharts = findPossibleCharts(allocLOM, propertiesShortNames.length);
 			if(foundcharts.size()==0){
-				System.out.print("No charts found for allocation: ");
-				System.out.println(alloc);
-				System.out.println("-------------------");
+//				System.out.print("No charts found for allocation: ");
+//				System.out.println(alloc);
+//				System.out.println("-------------------");
 			}
 			else{
 				charts.addAll(foundcharts);
@@ -146,7 +145,7 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 		
 		//To be provided by the interface
 		String[] propertiesNames = {"nameShort", "populationTotal", "populationYear", "HDITotal"};
-		String path = "/home/ahmad/git/Algorithm_forCharts_Recommendation/dev/Application/Bin/WebSemanticsLab/src/main/geodataModified.rdf";
+		String path = "/home/ahmad/Documents/geodata.rdf";
 		
 		findCharts(propertiesNames, path);
 	}

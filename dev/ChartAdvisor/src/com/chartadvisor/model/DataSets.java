@@ -190,9 +190,9 @@ public class DataSets {
 				
 				for (int j=0;j<Arraysize;j++){
 
-					objectResult[j] = slon.getLiteral("object"+(j+1)).getLexicalForm();
+					objectResult[j] = slon.getLiteral("object"+(j+1)).toString();
 
-					System.out.println(slon.getLiteral("object"+(j+1)).getLexicalForm());
+					System.out.println(slon.getLiteral("object"+(j+1)).toString());
 				}
 				
 				  ResultList.add(objectResult);
