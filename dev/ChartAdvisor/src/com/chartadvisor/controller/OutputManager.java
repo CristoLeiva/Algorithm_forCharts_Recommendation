@@ -14,22 +14,28 @@ import java.util.Scanner;
 
 public class OutputManager {
 	
+	public static final String ref01 = "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"";
+	public static final String ref02 = "xmlns:chr=\"http://chartrecommender.com/properties/\"";
+	public static final String ref03 = "xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\"";
+	
 	public void generateRDFOutput(List<String[]> results, File file){
 		try {
-			System.out.println(System.getProperty("user.dir"));
-			StringBuilder resultText = new StringBuilder(new Scanner(new File(System.getProperty("user.dir")+"/src/com/chartadvisor/controller/recommendation.rdf")).useDelimiter("\\Z").next());
-			int counter = 1;
-			for (String[] temp : results) {
-				replaceStr(resultText, "chart"+counter+".0", temp[0]);
-				replaceStr(resultText, "chart"+counter+".1", temp[0]);
-				replaceStr(resultText, "chart"+counter+".2", ""+counter);
-				replaceStr(resultText, "chart"+counter+".3", temp[1]);
-				counter++;
-			}
-			
 			FileWriter fw = new FileWriter(file);
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(resultText.toString());
+			bw.write("<rdf:RDF\n");
+			bw.write(ref01 + "\n");
+			bw.write(ref02 + "\n");
+			bw.write(ref03 + " >\n");
+			int counter = 1;
+			for (String[] temp : results) {
+				bw.write("<rdf:Description rdf:about=\"developers.google.com/chart/interactive/docs/gallery/" +temp[0]+ "\"> \n");
+				bw.write("<rdfs:label>" +temp[0]+ "</rdfs:label> \n");
+				bw.write("<chr:rank>" +counter+ "</chr:rank> \n");
+				bw.write("<chr:accuracy>" +temp[1]+ "</chr:accuracy> \n");
+				bw.write("</rdf:Description>\n");
+				counter++;
+			}
+			bw.write("</rdf:RDF>");
 			bw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
