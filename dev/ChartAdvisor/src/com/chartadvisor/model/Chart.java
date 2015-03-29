@@ -14,6 +14,8 @@ import java.util.*;
 public final class Chart {
 	
 private static final String chart = "/home/ahmad/Documents/chart.rdf";
+
+private static final String[] geoLabels = {"country","city","region","zip","zipcode"};
 	
 	
 	public static Model getModel(){
@@ -35,7 +37,7 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 		return new Allocation(left, right);
 	}
 	
-	private static ArrayList<String[]> findPossibleCharts(Allocation allocation, int totalProperties){
+	private static ArrayList<String[]> findPossibleCharts(String[] propertiesShortNames, Allocation allocation, int totalProperties){
 		ArrayList<String[]> result = new ArrayList<String[]>();
 		Model m = getModel();
 		ResIterator resources = m.listResourcesWithProperty(RDFS.label);
@@ -59,7 +61,12 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 									add = false;
 						}
 						if(add){
-							result.add(suggestedChart);
+							if(suggestedChart[0].equals("Geo Chart")){
+								if(possibleGeoChart(propertiesShortNames, allocation))
+									result.add(suggestedChart);
+							}
+							else	
+								result.add(suggestedChart);
 						}
 					}
 					//System.out.println(stmtIter.next().getProperty(OWL2.annotatedSource).getString());
@@ -73,6 +80,17 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 		return result;
 	}
 	
+	private static boolean possibleGeoChart(String[] propertiesShortNames, Allocation allocation) {
+		for(String property: propertiesShortNames){
+			for(String gLabel : geoLabels){
+				if(property.toLowerCase().contains(gLabel))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+
 	public static List<String[]> findCharts(String[] propertiesShortNames, String path){
 		ArrayList<String[]> charts = new ArrayList<String[]>();
 		List<String> propertiesSet = new ArrayList<String>(Arrays.asList(propertiesShortNames));
@@ -109,7 +127,7 @@ private static final String chart = "/home/ahmad/Documents/chart.rdf";
 		//System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
 		for(Allocation alloc : allocations){
 			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
-			ArrayList<String[]> foundcharts = findPossibleCharts(allocLOM, propertiesShortNames.length);
+			ArrayList<String[]> foundcharts = findPossibleCharts(propertiesShortNames, allocLOM, propertiesShortNames.length);
 			if(foundcharts.size()==0){
 //				System.out.print("No charts found for allocation: ");
 //				System.out.println(alloc);
