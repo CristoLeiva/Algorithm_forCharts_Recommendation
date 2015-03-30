@@ -15,7 +15,9 @@ public final class Chart {
 	
 private static final String chart = "/home/ahmad/Documents/chart.rdf";
 
-private static final String[] geoLabels = {"country","city","region","zip","zipcode"};
+private static final String[] geoLabels = {"country","city","region","zip","zipcode", "capital"};
+
+private static final String[] coordinates = {"lat", "mag", "latitude", "magnitude"}; 
 	
 	
 	public static Model getModel(){
@@ -37,7 +39,7 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		return new Allocation(left, right);
 	}
 	
-	private static List<String[]> findPossibleCharts(String[] propertiesShortNames, Allocation allocation, int totalProperties){
+	private static List<String[]> findPossibleCharts(String[] propertiesShortNames, Allocation allocation, Allocation prettyPrint, int totalProperties){
 		List<String[]> result = new ArrayList<String[]>();
 		Model m = getModel();
 		ResIterator resources = m.listResourcesWithProperty(RDFS.label);
@@ -51,9 +53,10 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 					Allocation alloc = toAllocation(stmtIter2);
 					//System.out.println("\nTO ALLOCATION:\n"+alloc);
 					if(alloc.equals(allocation)){
-						String[] suggestedChart = new String[]{"",""};
+						String[] suggestedChart = new String[]{"","",""};
 						suggestedChart[0] = resource.getProperty(RDFS.label).getString();
 						suggestedChart[1] = 100*allocation.getLength()/totalProperties + "";
+						suggestedChart[2] = prettyPrint.toString();
 						boolean add = true;
 						for(String[] existingResult:result){
 							if(existingResult[0].equals(suggestedChart[0]))
@@ -65,8 +68,14 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 								if(possibleGeoChart(propertiesShortNames, allocation))
 									result.add(suggestedChart);
 							}
-							else	
-								result.add(suggestedChart);
+							else{
+								if((suggestedChart[0].equals("Pie Chart"))||(suggestedChart[0].equals("Donut Chart"))){
+									if(possiblePieDonutChart(propertiesShortNames, allocation))
+										result.add(suggestedChart);
+								}
+								else
+									result.add(suggestedChart);
+							}
 						}
 					}
 					//System.out.println(stmtIter.next().getProperty(OWL2.annotatedSource).getString());
@@ -90,6 +99,17 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		
 		return false;
 	}
+	
+	private static boolean possiblePieDonutChart(String[] propertiesShortNames, Allocation allocation) {
+		for(String property: propertiesShortNames){
+			for(String gLabel : coordinates){
+				if(property.toLowerCase().contains(gLabel))
+					return false;
+			}
+		}
+		
+		return true;
+	}
 
 	public static List<String[]> findCharts(String[] propertiesShortNames, String path){
 		ArrayList<String[]> charts = new ArrayList<String[]>();
@@ -111,7 +131,7 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		
 		List<String[]> propertiesValues = DataSets.sparql_query_property(DataSets.create_model(path), propertiesCompleteNames);
 		
-		//allocations = AllocationGenerator.validateAllocations(allocations,propertiesValues, propertiesShortNames);
+		allocations = AllocationGenerator.validateAllocations(allocations,propertiesValues, propertiesShortNames);
 		if(allocations.size()==0)
 			System.out.println("There are now valid allocations for these properties..");
 		System.out.println("\nPossible Valid Allocations:\n"+allocations+"\n");
@@ -127,7 +147,7 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		//System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
 		for(Allocation alloc : allocations){
 			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
-			List<String[]> foundcharts = findPossibleCharts(propertiesShortNames, allocLOM, propertiesShortNames.length);
+			List<String[]> foundcharts = findPossibleCharts(propertiesShortNames, allocLOM, alloc, propertiesShortNames.length);
 			if(foundcharts.size()==0){
 //				System.out.print("No charts found for allocation: ");
 //				System.out.println(alloc);
@@ -198,13 +218,15 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		
 		
 		//To be provided by the interface
-		String[] propertiesNames = {"nameShort", "populationTotal", "populationYear"};
-		String path = "/home/ahmad/Documents/geodata.rdf";
+		String[] propertiesNames = {"nameShort", "populationTotal", "populationYear", "HDIYear"};
+		//String path = "/home/ahmad/Documents/geodata.rdf";
+		String path = "/home/ahmad/git/Algorithm_forCharts_Recommendation/dev/Application/Bin/WebSemanticsLab/src/main/geodata.rdf";
+
 		
 		List<String[]> charts = findCharts(propertiesNames, path);
 		for(String[] chart : charts){
 			System.out.print("Chart: "+chart[0]);
-			//System.out.print(" can be used to visualize allocation: "+ alloc);
+			System.out.print(" can be used to visualize allocation: "+ chart[2]);
 			System.out.println(" with percentage: "+chart[1] + "%");
 			System.out.println("-------------------");
 		}

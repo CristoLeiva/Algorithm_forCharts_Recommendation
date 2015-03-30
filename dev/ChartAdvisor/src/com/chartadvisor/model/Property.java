@@ -13,7 +13,16 @@ public class Property {
 	private String propertyCompleteName;
 	private String propertyName;
 	private String propertyType;
+	private String propertyValue;
 	
+
+	public String getPropertyValue() {
+		return propertyValue;
+	}
+
+	public void setPropertyValue(String propertyValue) {
+		this.propertyValue = propertyValue;
+	}
 
 	public String getPropertyCompleteName() {
 		return propertyCompleteName;

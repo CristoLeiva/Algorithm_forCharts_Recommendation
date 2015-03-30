@@ -115,34 +115,41 @@ public class AllocationGenerator {
 		int[] indeces = getIndecesArray(alloc, properties);
 		List<String[]> partialValues = getPartialArray(values, indeces);
 		for(String[] resultRow : partialValues){
-			for(int j=0; j<resultRow.length; j++){
-				if(resultRow[j]==null)
-					return false;
-				if(resultRow[j].length()==0)
-					return false;
-			}
-			int similarRows = 0;
-			for(String[] resultRow2: partialValues){
-				if(similarRows(resultRow, resultRow2)){
-					if(similarRows>0)
-						return false;
-					similarRows++;
-				}
-			}
+			if(similarInputDifferentOutput(resultRow, partialValues, alloc.leftAllocations.size()))
+				return false;
 		}
 		return true;
 	}
 	
-	private static boolean similarRows(String[] resultRow, String[] resultRow2) {
+
+	private static boolean similarInputDifferentOutput(String[] row1,
+			List<String[]> partialValues, int size) {
 		// TODO Auto-generated method stub
-		if(resultRow.length!=resultRow2.length){
-			return false;
+		boolean leftSimilar = true;
+		boolean rightSimilar = true;
+		for(String[] row2 : partialValues){
+			leftSimilar = true;
+			for(int i=0;i<size; i++){
+				if((row1[i]!=null)&&(row2[i]!=null))
+					if(!row1[i].equalsIgnoreCase(row2[i])){
+						leftSimilar = false;
+						break;
+					}
+			}
+			if(leftSimilar){
+				rightSimilar = true;
+				for(int i=size; i<row1.length; i++){
+					if((row1[i]!=null)&&(row2[i]!=null))
+						if(!row1[i].equalsIgnoreCase(row2[i])){
+							rightSimilar = false;
+							break;
+						}
+				}
+				if(!rightSimilar)
+					return true;
+			}
 		}
-		for(int i=0; i<resultRow.length; i++){
-			if(!resultRow[i].equals(resultRow2[i]))
-				return false;
-		}
-		return true;
+		return false;
 	}
 
 	public static List<Allocation> getLefTotalAllocations (List<Allocation> allocations, List<String[]> values, String[] properties){
@@ -171,7 +178,7 @@ public class AllocationGenerator {
 		int[] indeces = getIndecesArray(alloc, properties);
 		List<String[]> partialValues = getPartialArray(values, indeces);
 		for(String[] resultRow : partialValues){
-			for(int j=0; j<resultRow.length; j++){
+			for(int j=alloc.leftAllocations.size(); j<resultRow.length; j++){
 				if(resultRow[j]==null)
 					return false;
 				if(resultRow[j].length()==0)
