@@ -37,8 +37,8 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		return new Allocation(left, right);
 	}
 	
-	private static ArrayList<String[]> findPossibleCharts(String[] propertiesShortNames, Allocation allocation, int totalProperties){
-		ArrayList<String[]> result = new ArrayList<String[]>();
+	private static List<String[]> findPossibleCharts(String[] propertiesShortNames, Allocation allocation, int totalProperties){
+		List<String[]> result = new ArrayList<String[]>();
 		Model m = getModel();
 		ResIterator resources = m.listResourcesWithProperty(RDFS.label);
 		while(resources.hasNext()){
@@ -111,7 +111,7 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		
 		List<String[]> propertiesValues = DataSets.sparql_query_property(DataSets.create_model(path), propertiesCompleteNames);
 		
-		allocations = AllocationGenerator.validateAllocations(allocations,propertiesValues, propertiesShortNames);
+		//allocations = AllocationGenerator.validateAllocations(allocations,propertiesValues, propertiesShortNames);
 		if(allocations.size()==0)
 			System.out.println("There are now valid allocations for these properties..");
 		System.out.println("\nPossible Valid Allocations:\n"+allocations+"\n");
@@ -127,7 +127,7 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		//System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
 		for(Allocation alloc : allocations){
 			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
-			ArrayList<String[]> foundcharts = findPossibleCharts(propertiesShortNames, allocLOM, propertiesShortNames.length);
+			List<String[]> foundcharts = findPossibleCharts(propertiesShortNames, allocLOM, propertiesShortNames.length);
 			if(foundcharts.size()==0){
 //				System.out.print("No charts found for allocation: ");
 //				System.out.println(alloc);
@@ -136,16 +136,52 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 			else{
 				charts.addAll(foundcharts);
 				for(String[] chart:charts){
-					System.out.print("Chart: "+chart[0]);
-					System.out.print(" can be used to visualize allocation: "+ alloc);
-					System.out.println(" with percentage: "+chart[1] + "%");
-					System.out.println("-------------------");
+//					System.out.print("Chart: "+chart[0]);
+//					System.out.print(" can be used to visualize allocation: "+ alloc);
+//					System.out.println(" with percentage: "+chart[1] + "%");
+//					System.out.println("-------------------");
 				}
 			}
 		}
+		
+		removeDuplicates(charts);
+		
+		Collections.sort(charts, new Comparator<String[]>() {
+			@Override
+	        public int compare(String[] o1, String[] o2) {
+	        	return (Integer.parseInt(o2[1]) >= Integer.parseInt(o1[1])) ? 1 : -1;
+	        }});
+		
 		return charts;
 	}
+
 	
+	private static void removeDuplicates(
+			ArrayList<String[]> charts) {
+		List<String[]> duplicates = new ArrayList<String[]>();
+		for(String[] chart1 : charts){
+			int encountered = 0;
+			for(String[] chart2 : charts){
+				if(chart1[0].equals(chart2[0])){
+					if(Integer.parseInt(chart1[1])>Integer.parseInt(chart2[1])){
+						duplicates.add(chart2);
+					}
+					else{
+						if(Integer.parseInt(chart1[1])<Integer.parseInt(chart2[1])){
+							duplicates.add(chart1);
+						}
+						else{
+							encountered++;
+							if(encountered>1)
+								duplicates.add(chart2);
+						}
+					}
+				}
+			}
+		}
+		charts.removeAll(duplicates);
+	}
+
 	public static void main(String[] args) {
 //		Model m = ModelFactory.createDefaultModel();//Chart.getModel();
 //		m.createResource("http://chartsmetadata.com/ColumnChart").addProperty(RDFS.label, "Column Chart").addProperty(RDFS.isDefinedBy, m.createResource("http://chartsmetadata.com/ColumnChart/ChartPattern1").addProperty(OWL2.annotatedSource, "ORDINAL").addProperty(OWL2.annotatedSource, "CATEGORICAL").addProperty(OWL2.annotatedTarget, "QUANTITATIVE")).addProperty(RDFS.isDefinedBy, m.createResource("http://chartsmetadata.com/ColumnChart/ChartPattern2").addProperty(OWL2.annotatedSource, "ORDINAL").addProperty(OWL2.annotatedTarget, "QUANTITATIVE_"));
@@ -162,10 +198,16 @@ private static final String[] geoLabels = {"country","city","region","zip","zipc
 		
 		
 		//To be provided by the interface
-		String[] propertiesNames = {"nameShort", "populationTotal", "populationYear", "HDITotal"};
+		String[] propertiesNames = {"nameShort", "populationTotal", "populationYear"};
 		String path = "/home/ahmad/Documents/geodata.rdf";
 		
-		findCharts(propertiesNames, path);
+		List<String[]> charts = findCharts(propertiesNames, path);
+		for(String[] chart : charts){
+			System.out.print("Chart: "+chart[0]);
+			//System.out.print(" can be used to visualize allocation: "+ alloc);
+			System.out.println(" with percentage: "+chart[1] + "%");
+			System.out.println("-------------------");
+		}
 	}
 
 }
