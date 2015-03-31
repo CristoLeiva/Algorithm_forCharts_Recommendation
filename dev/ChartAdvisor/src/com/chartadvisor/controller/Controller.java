@@ -86,6 +86,7 @@ public class Controller implements ActionListener {
 		}
 		if (e.getSource() == view.getJmenu_Dictionary()) {
 			DictionaryView dictionaryView = new DictionaryView();
+			DictionaryManager dmanager = new DictionaryManager(dictionaryView);
 			dictionaryView.pack();
 			dictionaryView.setVisible(true);
 		}
