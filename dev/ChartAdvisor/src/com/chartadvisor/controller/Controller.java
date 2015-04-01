@@ -71,6 +71,7 @@ public class Controller implements ActionListener {
 			        int returnValue = fileChooser.showSaveDialog(null);
 			        if (returnValue == JFileChooser.APPROVE_OPTION) {
 						outputManager.generateRDFOutput(results, new File(fileChooser.getSelectedFile().toString() + ".rdf"));
+						JOptionPane.showMessageDialog(this.view,"Recommendation list successfully created!","Success!", JOptionPane.INFORMATION_MESSAGE);
 			        }
 				}
 			}
@@ -86,6 +87,7 @@ public class Controller implements ActionListener {
 		}
 		if (e.getSource() == view.getJmenu_Dictionary()) {
 			DictionaryView dictionaryView = new DictionaryView();
+			DictionaryManager dmanager = new DictionaryManager(dictionaryView);
 			dictionaryView.pack();
 			dictionaryView.setVisible(true);
 		}

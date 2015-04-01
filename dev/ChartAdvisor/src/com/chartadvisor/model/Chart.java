@@ -13,7 +13,7 @@ import java.util.*;
 
 public final class Chart {
 		
-private static final String chart = "C:/Users/Cristo/Desktop/ChartAdvisor/TEST/chart.rdf";
+private static final String chart = "C:/Users/Cristo/Desktop/LAB/chart.rdf";
 
 private static final String[] geoLabels = {"country","city","region","zip","zipcode", "capital"};
 
@@ -80,7 +80,7 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 					}
 					//System.out.println(stmtIter.next().getProperty(OWL2.annotatedSource).getString());
 				}catch (Exception e){
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				
 			}
