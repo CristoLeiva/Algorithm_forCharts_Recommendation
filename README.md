@@ -3,6 +3,7 @@ Chart Advisor is a standalone software that process an Input RDF Dataset and pro
 
 [![](https://github.com/CristoLeiva/Algorithm_forCharts_Recommendation/blob/master/wiki_resources/user_manual/videotutorial.jpg)](https://youtu.be/v7hBu5nNlFI)
 
+* [Wiki Documentation](https://github.com/CristoLeiva/Algorithm_forCharts_Recommendation/wiki)
 * [Technical Documentation](https://github.com/CristoLeiva/Algorithm_forCharts_Recommendation/wiki/Technical-Documentation)
 * [User Manual](https://github.com/CristoLeiva/Algorithm_forCharts_Recommendation/wiki/User-Manual)
 * [Testing Results](https://github.com/CristoLeiva/Algorithm_forCharts_Recommendation/wiki/Testing-Results)
