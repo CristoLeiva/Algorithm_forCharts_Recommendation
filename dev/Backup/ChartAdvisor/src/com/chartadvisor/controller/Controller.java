@@ -63,7 +63,7 @@ public class Controller implements ActionListener {
 			if (view.getCheckedItems().isEmpty()) {
 				JOptionPane.showMessageDialog(this.view,"No properties were selected. Please make sure you have selected some properties.","Warning!", JOptionPane.WARNING_MESSAGE);
 			} else {
-				List<String[]> results = this.findCharts(this.getSelectedProperties(), inputFilePath); //REPLACE WITH REAL findChard METHOD!
+				List<String[]> results = Chart.findCharts(this.getSelectedProperties(), inputFilePath); //REPLACE WITH REAL findChard METHOD!
 				if (results.isEmpty()) {//REPLACE WITH REAL findChard METHOD!
 					JOptionPane.showMessageDialog(this.view,"No Chart matches were found! Please try selecting other properties.","Warning!", JOptionPane.WARNING_MESSAGE);
 				} else {
@@ -71,6 +71,7 @@ public class Controller implements ActionListener {
 			        int returnValue = fileChooser.showSaveDialog(null);
 			        if (returnValue == JFileChooser.APPROVE_OPTION) {
 						outputManager.generateRDFOutput(results, new File(fileChooser.getSelectedFile().toString() + ".rdf"));
+						JOptionPane.showMessageDialog(this.view,"Recommendation list successfully created!","Success!", JOptionPane.INFORMATION_MESSAGE);
 			        }
 				}
 			}

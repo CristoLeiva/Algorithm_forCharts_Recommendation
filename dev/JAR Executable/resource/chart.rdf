@@ -104,20 +104,20 @@
     <owl:annotatedTarget>QUANTITATIVE</owl:annotatedTarget>
     <owl:annotatedSource>QUANTITATIVE</owl:annotatedSource>
     <owl:annotatedSource>CATEGORICAL</owl:annotatedSource>
-    <owl:annotatedSource>CATEGORICAL</owl:annotatedSource>
+    <owl:annotatedSource>CATEGORICAL1</owl:annotatedSource>
   </rdf:Description>
   <rdf:Description rdf:about="http://chartsmetadata.com/BubbleChart/ChartPattern3">
     <owl:annotatedTarget>QUANTITATIVE</owl:annotatedTarget>
     <owl:annotatedSource>QUANTITATIVE</owl:annotatedSource>
-    <owl:annotatedSource>QUANTITATIVE</owl:annotatedSource>
+    <owl:annotatedSource>QUANTITATIVE1</owl:annotatedSource>
     <owl:annotatedSource>CATEGORICAL</owl:annotatedSource>
   </rdf:Description>
   <rdf:Description rdf:about="http://chartsmetadata.com/BubbleChart/ChartPattern4">
     <owl:annotatedTarget>QUANTITATIVE</owl:annotatedTarget>
     <owl:annotatedSource>QUANTITATIVE</owl:annotatedSource>
     <owl:annotatedSource>CATEGORICAL</owl:annotatedSource>
-    <owl:annotatedSource>QUANTITATIVE</owl:annotatedSource>
-    <owl:annotatedSource>CATEGORICAL</owl:annotatedSource>
+    <owl:annotatedSource>QUANTITATIVE1</owl:annotatedSource>
+    <owl:annotatedSource>CATEGORICAL1</owl:annotatedSource>
   </rdf:Description>
 
   <rdf:Description rdf:about="http://chartsmetadata.com/GeoChart">
