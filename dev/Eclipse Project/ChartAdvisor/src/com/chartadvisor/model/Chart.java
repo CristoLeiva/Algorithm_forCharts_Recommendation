@@ -14,7 +14,7 @@ import java.util.*;
 
 public final class Chart {
 	
-//private static final String chart = "C:/Users/Cristo/Desktop/FINAL LAB/resource/chart.rdf";
+//private static final String chart = "/home/cristo/Documents/rdfTest/resource/chart.rdf";
 private static final String chart = Controller.findAbsoluteLocation()+"/resource/chart.rdf"; // FOR .JAR 
 
 private static final String[] geoLabels = {"country","city","region","zip","zipcode", "capital"};
@@ -113,7 +113,7 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 		return true;
 	}
 
-	public static List<String[]> findCharts(String[] propertiesShortNames, String path){
+	public static List<String[]> findCharts(String[] propertiesShortNames, String path) throws NullPointerException{
 		ArrayList<String[]> charts = new ArrayList<String[]>();
 		List<String> propertiesSet = new ArrayList<String>(Arrays.asList(propertiesShortNames));
 		//Property[] properties = {new Property("pop_count","integer"),new Property("year","integer"),new Property("country","string")};

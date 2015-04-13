@@ -12,7 +12,7 @@ import com.hp.hpl.jena.vocabulary.*;
 
 public final class Dictionary {
 	
-//	private static final String dict = "C:/Users/Cristo/Desktop/FINAL LAB/resource/dictionary.rdf";
+//	private static final String dict = "/home/cristo/Documents/rdfTest/resource/dictionary.rdf";
 	private static final String dict = Controller.findAbsoluteLocation()+"/resource/dictionary.rdf"; // FOR .JAR 
 	
 	public static Model getModel(){
