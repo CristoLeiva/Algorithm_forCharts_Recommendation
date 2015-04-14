@@ -25,6 +25,7 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 		return FileManager.get().loadModel(chart);
 	}
 	
+	// Transform a StmtIterator to an allocation, in order to compare the chart to the generated allocations
 	public static Allocation toAllocation(StmtIterator stmtIter){
 		ArrayList<Property> left = new ArrayList<Property>();
 		ArrayList<Property> right = new ArrayList<Property>();
@@ -39,6 +40,9 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 		return new Allocation(left, right);
 	}
 	
+	// Search for charts, that can support the given allocation:
+	// allocation: is the allocation desired in LOM form
+	// prettyPrint: is the same allocation with properties Names intead of LOMs
 	private static List<String[]> findPossibleCharts(String[] propertiesShortNames, Allocation allocation, Allocation prettyPrint, int totalProperties){
 		List<String[]> result = new ArrayList<String[]>();
 		Model m = getModel();
@@ -52,7 +56,8 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 					StmtIterator stmtIter2 =  resource2.listProperties();
 					Allocation alloc = toAllocation(stmtIter2);
 					//System.out.println("\nTO ALLOCATION:\n"+alloc);
-					if(alloc.equals(allocation)){
+					
+					if(alloc.equals(allocation)){ //There is a match!, this particular chart can visualize this particular allocation
 						String[] suggestedChart = new String[]{"","",""};
 						suggestedChart[0] = resource.getProperty(RDFS.label).getString();
 						suggestedChart[1] = 100*allocation.getLength()/totalProperties + "";
@@ -89,6 +94,7 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 		return result;
 	}
 	
+	// an allocation should contain at least one of the properties in geoLabels[] in order to allow a geo chart suggestion
 	private static boolean possibleGeoChart(String[] propertiesShortNames, Allocation allocation) {
 		for(String property: propertiesShortNames){
 			for(String gLabel : geoLabels){
@@ -100,6 +106,7 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 		return false;
 	}
 	
+	// an allocation should not contain any of the properties in coordinates[] in order to allow a pie chart suggestion
 	private static boolean possiblePieDonutChart(String[] propertiesShortNames, Allocation allocation) {
 		for(String property: propertiesShortNames){
 			for(String gLabel : coordinates){
@@ -110,11 +117,12 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 		
 		return true;
 	}
-
+	
+	// Find the charts that can visualize the list of properties
+	// path: is the path to the input data file.
 	public static List<String[]> findCharts(String[] propertiesShortNames, String path){
 		ArrayList<String[]> charts = new ArrayList<String[]>();
 		List<String> propertiesSet = new ArrayList<String>(Arrays.asList(propertiesShortNames));
-		//Property[] properties = {new Property("pop_count","integer"),new Property("year","integer"),new Property("country","string")};
 		List<String[]> literals = DataSets.get_properties(DataSets.create_model(path), 1);
 		Property[] properties = new Property[propertiesShortNames.length];
 		String[] propertiesCompleteNames = new String[propertiesShortNames.length];
@@ -126,27 +134,26 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 				System.out.println(literal[1]);
 			}
 		}
-		//findCharts(new Allocation(left, right));
+		
+		//Generating all possible allocations out of the list of given properties
 		List<Allocation> allocations = AllocationGenerator.generateAllocations(properties);
 		
+		// Query the data file for all those properties
 		List<String[]> propertiesValues = DataSets.sparql_query_property(DataSets.create_model(path), propertiesCompleteNames);
 		
+		// Validate generated properties against the resultSet of executing the query.
 		allocations = AllocationGenerator.validateAllocations(allocations,propertiesValues, propertiesShortNames);
 		if(allocations.size()==0)
 			System.out.println("There are now valid allocations for these properties..");
 		System.out.println("\nPossible Valid Allocations:\n"+allocations+"\n");
 		
 		
-//		for (String[] values : propertiesValues){
-//			for(String value : values){
-//				System.out.print(value+"\t");
-//			}
-//			System.out.println();
-//		}
-		
 		//System.out.println(findCharts(Allocation.toLOMAllocation(new Allocation(left, right))));
+		
 		for(Allocation alloc : allocations){
+			// Generate the LOM allocation for every valid generated allocation
 			Allocation allocLOM = Allocation.toLOMAllocation(alloc);
+			//Search for possible charts to visualize each and particular allocation
 			List<String[]> foundcharts = findPossibleCharts(propertiesShortNames, allocLOM, alloc, propertiesShortNames.length);
 			if(foundcharts.size()==0){
 //				System.out.print("No charts found for allocation: ");
@@ -164,8 +171,11 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 			}
 		}
 		
+		// sometimes, 2+ allocations can be visualized with the same chart, resulting in repeated suggestion
+		// removing duplicates here:
 		removeDuplicates(charts);
 		
+		//Sort suggested chart by accuracy:
 		Collections.sort(charts, new Comparator<String[]>() {
 			@Override
 	        public int compare(String[] o1, String[] o2) {
@@ -182,12 +192,12 @@ private static final String[] coordinates = {"lat", "mag", "latitude", "magnitud
 		for(String[] chart1 : charts){
 			int encountered = 0;
 			for(String[] chart2 : charts){
-				if(chart1[0].equals(chart2[0])){
-					if(Integer.parseInt(chart1[1])>Integer.parseInt(chart2[1])){
+				if(chart1[0].equals(chart2[0])){ // if the same chart name
+					if(Integer.parseInt(chart1[1])>Integer.parseInt(chart2[1])){ // if the accuracy of chart2 is less, remove it
 						duplicates.add(chart2);
 					}
 					else{
-						if(Integer.parseInt(chart1[1])<Integer.parseInt(chart2[1])){
+						if(Integer.parseInt(chart1[1])<Integer.parseInt(chart2[1])){  // if the accuracy of chart1 is less, remove it
 							duplicates.add(chart1);
 						}
 						else{

@@ -10,24 +10,7 @@ import com.chartadvisor.utils.Combinations;
 
 public class AllocationGenerator {
 	
-//	public static ArrayList<Allocation> generateAllocations(String[] properties){
-//		ArrayList<Allocation> allocations = new ArrayList<Allocation>();
-//		ArrayList<ArrayList<String>> list1,list2;
-//		for (int i=1; i<=properties.length; i++){
-//			list1 = Combinations.combination(properties, i);
-//			for(int j=0; j<list1.size(); j++){
-//				for(int k=1; k<= properties.length-list1.get(j).size(); k++){
-//					Object[] newProp = removeListFromList(properties, list1.get(j));
-//					list2 = Combinations.combination(newProp, k);
-//					for(int l=0; l<list2.size();l++){
-//						allocations.add(new Allocation(list1.get(j), list2.get(l)));
-//					}
-//				}
-//			}
-//		}
-//		return allocations;
-//	}
-	
+	//Get the index of a property in the list of properties
 	public static int getPropertyIndex(String[] properties, String property){
 		for(int i=0; i<properties.length; i++){
 			if(properties[i].equals(property)){
@@ -37,6 +20,7 @@ public class AllocationGenerator {
 		return -1;
 	}
 	
+	//Get the indeces of the list of given properties, within the given allocation
 	public static int[] getIndecesArray(Allocation alloc, String[] properties){
 		int[] result = new int[alloc.getLength()];
 		for(int i=0; i<alloc.leftAllocations.size(); i++){
@@ -48,6 +32,7 @@ public class AllocationGenerator {
 		return result;
 	}
 	
+	//Reduce the "whole" array to a smaller array that contains only properties in "indeces"
 	public static List<String[]> getPartialArray(List<String[]> whole, int[] indeces){
 		List<String[]> partial = new ArrayList<String[]>();
 		for(int i=0; i<whole.size();i++){
@@ -62,7 +47,8 @@ public class AllocationGenerator {
 		return partial;
 	}
 	
-	public static List<Allocation> generateAllocations(Property[] properties){
+	//Generate all possible allocations from a list of properties
+	public static List<Allocation> generateAllocations(Property[] properties) throws NullPointerException{
 		ArrayList<Allocation> allocations = new ArrayList<Allocation>();
 		ArrayList<ArrayList<Property>> list1,list2;
 		for (int i=1; i<=properties.length; i++){
@@ -92,14 +78,13 @@ public class AllocationGenerator {
 		return result.toArray();
 	}
 	
+	//Get the valid allocations from  list of all generated allocations:
+	// Valid : 1- RightUnique, 2-LeftTotal		
 	public static List<Allocation> validateAllocations (List<Allocation> allocations, List<String[]> values, String[] properties){
-		//TODO
-		// Depends on getting the values of all user selected properties from the RDF: Jorge
-		//System.out.println("Allocations Are NOT Yet Validated");
-		
 		return getRightUniqueAllocations(getLefTotalAllocations(allocations, values, properties), values, properties);
 	}
 	
+	//Get all RightUnique Allocations
 	public static List<Allocation> getRightUniqueAllocations (List<Allocation> allocations, List<String[]> values, String[] properties){
 		List<Allocation> rightUnique = new ArrayList<Allocation>();
 		for(Allocation alloc : allocations){
@@ -109,9 +94,9 @@ public class AllocationGenerator {
 		return rightUnique;
 	}
 	
+	//Check if the allocation is RightUnique, which means
+	// if xRy and xRz --> y	= z
 	public static boolean isRightUnique(Allocation alloc, List<String[]> values, String[] properties){
-//		if(alloc.toString().equals("(nameShort:String ,populationYear:int)---> (populationTotal:float)"))
-//			System.out.println();
 		int[] indeces = getIndecesArray(alloc, properties);
 		List<String[]> partialValues = getPartialArray(values, indeces);
 		for(String[] resultRow : partialValues){
@@ -121,10 +106,10 @@ public class AllocationGenerator {
 		return true;
 	}
 	
-
+	// Check if a list of properties i.e. "input" (should be on the leftSide of an allocation)
+	// more than one detination in the rightSide of the allocation
 	private static boolean similarInputDifferentOutput(String[] row1,
 			List<String[]> partialValues, int size) {
-		// TODO Auto-generated method stub
 		boolean leftSimilar = true;
 		boolean rightSimilar = true;
 		for(String[] row2 : partialValues){
@@ -152,6 +137,7 @@ public class AllocationGenerator {
 		return false;
 	}
 
+	//Get all leftTotal Allocations
 	public static List<Allocation> getLefTotalAllocations (List<Allocation> allocations, List<String[]> values, String[] properties){
 		List<Allocation> leftTotal = new ArrayList<Allocation>();
 		for(Allocation alloc : allocations){
@@ -161,20 +147,11 @@ public class AllocationGenerator {
 		return leftTotal;
 	}
 	
-	
-	
-//	public static Object[] removeListFromList(String[] properties, ArrayList<String> combinations){
-//		ArrayList<String> result = new ArrayList<String>(); 
-//		for(int i=0; i<properties.length; i++){
-//			if(!combinations.contains(properties[i]))
-//				result.add(properties[i]);
-//		}
-//		return result.toArray();
-//	}
-	
+
+	//Check of the allocation is leftTotal
+	//Every element on the left, shall have a destination element
 	private static boolean isLeftTotal(Allocation alloc, List<String[]> values,
 			String[] properties) {
-		// TODO Auto-generated method stub
 		int[] indeces = getIndecesArray(alloc, properties);
 		List<String[]> partialValues = getPartialArray(values, indeces);
 		for(String[] resultRow : partialValues){

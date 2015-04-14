@@ -61,6 +61,7 @@ public class DictionaryManager implements ActionListener {
 		return resultList.toArray(new String[resultList.size()]); 
 	}
 	
+	//Adds a new property to the dictionary (propertyName, propertyType) and its level of measurement (LOM)
 	public void addResource(String propertyName, String propertyType, String LOM) throws Exception{
 		String alreadyExists = this.getLOM(propertyName, propertyType);
 		if(alreadyExists != null){
@@ -77,6 +78,7 @@ public class DictionaryManager implements ActionListener {
 		}
 	}
 	
+	//Search for the LOM of a property in the dictionary.
 	public String getLOM(String propertyName, String propertyType){
 		Model m = this.getModel();
 		ResIterator resources = m.listResourcesWithProperty(RDFS.label);

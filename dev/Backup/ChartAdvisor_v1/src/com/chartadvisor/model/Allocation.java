@@ -41,6 +41,8 @@ public class Allocation {
 			return false;
 		else{
 			Allocation alloc = (Allocation)o;
+			/* sometimes the allocation has a closure on its right side, like: a->b* which means: a->b,b,b,b,.....
+			 * so we need to remove that before we compare it  */
 			Allocation removeClosure = new Allocation(this);
 			if(this.rightAllocations.get(0).getPropertyType().endsWith("*")){
 				this.rightAllocations.get(0).setPropertyType(this.rightAllocations.get(0).getPropertyType().substring(0, this.rightAllocations.get(0).getPropertyType().length()-1));
@@ -64,7 +66,10 @@ public class Allocation {
 		}
 	}
 	
-	
+	// instead of being a-->b it might be: categorical-->quantitative
+	/*Search the dictionary for the properties in both sides of the allocation, 
+	 * and return the LOM for each one, then generate an allocation
+	 * out of these LOMs*/
 	public static Allocation toLOMAllocation(Allocation alloc){
 		ArrayList<Property> left = new ArrayList<Property>();
 		ArrayList<Property> right = new ArrayList<Property>();
@@ -80,6 +85,7 @@ public class Allocation {
 		return new Allocation(left, right);
 	}
 	
+	//Number of properties on both sides
 	public int getLength(){
 		return this.leftAllocations.size()+this.rightAllocations.size();
 	}

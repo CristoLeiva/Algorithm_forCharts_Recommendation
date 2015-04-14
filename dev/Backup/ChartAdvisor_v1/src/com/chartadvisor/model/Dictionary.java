@@ -18,6 +18,7 @@ public final class Dictionary {
 		return FileManager.get().loadModel(dict);
 	}
 	
+	//Adds a new property to the dictionary (propertyName, propertyType) and its level of measurement (LOM)
 	public static void addResource(String propertyName, String propertyType, String LOM) throws Exception{
 		String alreadyExists = Dictionary.getLOM(propertyName, propertyType);
 		if(alreadyExists != null){
@@ -33,6 +34,7 @@ public final class Dictionary {
 		}
 	}
 	
+	//Search for the LOM of a property in the dictionary.
 	public static String getLOM(String propertyName, String propertyType){
 		Model m = Dictionary.getModel();
 		ResIterator resources = m.listResourcesWithProperty(RDFS.label);
@@ -58,7 +60,6 @@ public final class Dictionary {
 		try {
 			Dictionary.addResource("year", "integer", "ordinal");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

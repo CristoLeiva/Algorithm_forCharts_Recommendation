@@ -45,7 +45,6 @@ public class Property {
 	}
 	public Property() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Property(String propertyName, String propertyType) {
 		super();
